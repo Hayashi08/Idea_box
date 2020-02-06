@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %}TOP{% endblock %}
+
+{% block top %}
+    {{ object.name }}
+{% endblock %}
+
+{% block project %}
+
+<li class="">
+{% for project in projects %}
+
+
+        <a class="nav-link" href="{% url 'project_list' pk=project.pk %}">
+          <span class="text-gray-100 mx-3">{{ project.name }}</span>
+        </a>
+
+{% endfor %}
+</li>
+
+{% endblock %}
+
+{% block content %}
+
+    <p class="h5">目的 : {{ object.goal }}</p>
+    <p>
+        開始：{{ object.created_at }} &nbsp;&nbsp;
+        {% if object.finished_at %}
+            終了：{{ object.finished_at }}
+        {% else %}
+            期限：{{ object.limit }}
+        {% endif %}
+    </p>
+
+
+    <div class="container py-3">
+
+        <div class="row justify-content-center">
+
+        {% if object.conc.count != 0 %}
+
+
+            {% for conc in object.conc.all %}
+            <div class="col-lg-9 py-2">
+            <p class="h5">結論</p>
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3 bg-success">
+                                <h5 class="m-0 font-weight-bold text-gray-100">
+                                    {{ conc.conclusion }}
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                {{ conc.description }}
+                            </div>
+                        </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        {% for post in object.ideas.all %}
+            <div class="col-lg-9 py-2">
+
+              {% if request.user.id == post.author_id %}
+                    <div class="float-right text-center pl-1">
+                        <i class="fas fa-user-circle text-primary fa-5x"></i><br>
+                        {{ post.author }}
+                    </div>
+              {% else %}
+                  <div class="float-left text-center pr-1">
+                        <i class="fas fa-user-circle fa-5x"></i><br>
+                        {{ post.author }}
+                  </div>
+              {% endif %}
+              <div class="float-right">
+
+              </div>
+              <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                  <small class="float-right">
+                    {{ post.updated_at }}
+                  </small>
+                  <h5 class="m-0 font-weight-bold text-primary">
+                    <a href="{% url 'detail' pk=post.pk %}">{{ post.idea }}</a>
+                  </h5>
+                </div>
+                <div class="card-body">
+                    {% if post.image %}
+                        <p><img src="{{ post.image.url }}" width="100" height="100" class="float-right"></p>
+                    {% endif %}
+                    {{ post.description }}
+                </div>
+              </div>
+            </div>
+        {% endfor %}
+
+        </div>
+
+    </div>
+
+    <p><a href="{% url 'idea_form' pk=object.pk %}">Add Idea</a></p>
+
+    <p><a href="{% url 'board' pk=object.pk %}">Create board</a></p>
+
+    <p><a href="{% url 'conclusion' pk=object.pk %}">Conclusion</a></p>
+
+    <p><a href="{% url 'project_delete' pk=object.pk %}">Project delete</a></p>
+
+{% endblock %}

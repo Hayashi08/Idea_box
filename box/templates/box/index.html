@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}TOP{% endblock %}
+
+{% block top %}
+最近投稿したアイディア
+{% endblock %}
+
+{% block project %}
+
+<li class="">
+{% for project in projects %}
+
+
+        <a class="nav-link" href="{% url 'project_list' pk=project.pk %}">
+          <span class="text-gray-100 mx-3">{{ project.name }}</span>
+        </a>
+
+{% endfor %}
+</li>
+
+{% endblock %}
+
+{% block content %}
+
+
+    <div class="container py-3">
+
+        <div class="row justify-content-center">
+
+        {% for post in object_list %}
+        {% if request.user.id == post.author_id %}
+            <div class="col-lg-9">
+              <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                  <small class="float-right">
+                    {{ post.updated_at }}
+                  </small>
+                  <h5 class="m-0 font-weight-bold text-primary">
+                    <a href="{% url 'detail' pk=post.pk %}">{{ post.idea }}</a>
+                  </h5>
+                </div>
+                <div class="card-body">
+                    {% if post.image %}
+                        <p><img src="{{ post.image.url }}" width="180" height="150" class="float-right"></p>
+                    {% endif %}
+                    {{ post.description }}
+                </div>
+              </div>
+            </div>
+        {% endif %}
+        {% endfor %}
+
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{#{% if is_paginated %}#}
+{#        <div class="text-center py-3">#}
+{#            {% if page_obj.has_previous %}#}
+{#            <a href="?page={{ page_obj.previous_page_number }}">&lt;&lt; Prev</a>#}
+{#            {% else %}#}
+{#            &lt;&lt; Prev#}
+{#            {% endif %}#}
+{#            {% if page_obj.has_next %}#}
+{#            <a href="?page={{ page_obj.next_page_number }}">Next &gt;&gt;</a>#}
+{#            {% else %}#}
+{#            Next &gt;&gt;#}
+{#            {% endif %}#}
+{#        </div>#}
+{#{% endif %}#}
+{#{% endblock %}#}

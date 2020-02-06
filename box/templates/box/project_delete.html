@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete{% endblock %}
+
+{% block top %}
+プロジェクト削除
+{% endblock %}
+
+{% block project %}
+
+<li class="">
+{% for project in projects %}
+
+
+        <a class="nav-link" href="{% url 'project_list' pk=project.pk %}">
+          <span class="text-gray-100 mx-3">{{ project.name }}</span>
+        </a>
+
+{% endfor %}
+</li>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="">
+
+    <p> プロジェクト「{{ object.name }}」 を本当に削除しても良いですか?</p>
+    <p>目的：{{ object.goal|linebreaksbr }}</p>
+    <p>期限：{{ object.limit }}</p>
+
+    <p>
+    <form action="" method="post">{% csrf_token %}
+        <button type="submit" class="btn btn-danger">Delete</button>
+    </form>
+    </p>
+
+<section>
+    <p><a href="javascript:history.back()">&lt; Back</a></p>
+</section>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Add idea{% endblock %}
+
+{% block top %}
+    結論
+{% endblock %}
+
+{% block project %}
+
+<li class="">
+{% for project in projects %}
+
+        <a class="nav-link" href="{% url 'project_list' pk=project.pk %}">
+          <span class="text-gray-100 mx-3">{{ project.name }}</span>
+        </a>
+
+{% endfor %}
+</li>
+
+{% endblock %}
+
+{% block content %}
+
+<form method="post" class="post-form" enctype="multipart/form-data">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Define</button>
+</form>
+
+<p><a href="javascript:history.back()">&lt; Back</a></p>
+
+{% endblock %}
