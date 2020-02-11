@@ -1,0 +1,7 @@
+.sidebar-brand-text{
+  font-size: 1.5rem;
+}
+
+.post-form textarea, .post-form input {
+    width: 50%;
+}
