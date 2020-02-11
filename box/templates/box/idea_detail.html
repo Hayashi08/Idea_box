@@ -6,21 +6,6 @@
 アイディアの詳細
 {% endblock %}
 
-{% block project %}
-
-<li class="">
-{% for project in projects %}
-
-
-        <a class="nav-link" href="{% url 'project_list' pk=project.pk %}">
-          <span class="text-gray-100 mx-3">{{ project.name }}</span>
-        </a>
-
-{% endfor %}
-</li>
-
-{% endblock %}
-
 {% block content %}
 
 <div class="">
@@ -29,8 +14,8 @@
     <span class="mr-5">{{ object.idea }}</span>
     {# ownership #}
     {% if request.user.id == object.author_id %}
-        <a class="btn btn-primary btn-circle" href="{% url 'update' object.pk %}"><i class="fas fa-edit"></i></a>
-        <a class="btn btn-danger btn-circle" href="{% url 'delete' object.pk %}"><i class="fas fa-trash"></i></a>
+        <a class="btn btn-primary btn-circle" href="{% url 'idea_update' object.pk %}"><i class="fas fa-edit"></i></a>
+        <a class="btn btn-danger btn-circle" href="{% url 'idea_delete_confirm' object.pk %}"><i class="fas fa-trash"></i></a>
     {% endif %}
 </h1>
 <p>{{ object.description|linebreaksbr }}</p>

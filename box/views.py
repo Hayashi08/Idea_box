@@ -13,7 +13,7 @@ from .forms import IdeaForm,ConclusionForm
 
 # index
 
-class IndexView(LoginRequiredMixin,generic.ListView):
+class IndexView(LoginRequiredMixin, generic.ListView):
     model = Idea
     ordering = ['-created_at']
     template_name = 'box/index.html'
@@ -27,10 +27,10 @@ class IndexView(LoginRequiredMixin,generic.ListView):
 
 # Project
 
-class CreateProject(generic.edit.CreateView):
+class CreateProject(LoginRequiredMixin, generic.edit.CreateView):
     model = Project
     fields = ['name', 'goal', 'limit']
-    template_name = 'box/create_project.html'
+    template_name = 'box/project_create.html'
 
     def form_valid(self, form):
         return super(CreateProject, self).form_valid(form)
@@ -40,9 +40,29 @@ class CreateProject(generic.edit.CreateView):
         context["projects"] = Project.objects.all()
         return context
 
-class ProjectList(generic.DetailView):
+class ProjectList(LoginRequiredMixin, generic.DetailView):
     model = Project
     template_name = 'box/project_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["projects"] = Project.objects.all()
+        return context
+
+class DetailProject(LoginRequiredMixin, generic.DetailView):
+    model = Project
+    template_name = 'box/project_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["projects"] = Project.objects.all()
+        return context
+
+class UpdateProject(LoginRequiredMixin, generic.edit.UpdateView):
+    model = Project
+    fields = ['name', 'goal', 'limit']
+
+    template_name = 'box/project_create.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -55,14 +75,6 @@ class DeleteProject(LoginRequiredMixin, generic.edit.DeleteView):
 
     template_name = 'box/project_delete.html'
 
-    def dispatch(self, request, *args, **kwargs):
-        # ownership validation
-        # obj = self.get_object()
-        # if obj.author != self.request.user:
-        #     raise PermissionDenied('You do not have permission to delete.')
-
-        return super(DeleteProject, self).dispatch(request, *args, **kwargs)
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["projects"] = Project.objects.all()
@@ -71,16 +83,15 @@ class DeleteProject(LoginRequiredMixin, generic.edit.DeleteView):
 
 # Idea
 
+@login_required
 def post_idea(request, pk):
     project = get_object_or_404(Project, pk=pk)
     projects = Project.objects.all()
     if request.method == "POST":
-        form = IdeaForm(request.POST)
+        form = IdeaForm(request.POST, request.FILES)
         if form.is_valid():
             idea = form.save(commit=False)
             idea.author = request.user
-            if idea.image:
-                idea.image = request.FILES['image']
             idea.project = project
             idea.save()
             return redirect('project_list', pk=project.pk)
@@ -116,19 +127,61 @@ class UpdateIdea(LoginRequiredMixin, generic.edit.UpdateView):
         context["projects"] = Project.objects.all()
         return context
 
-class DeleteIdea(LoginRequiredMixin, generic.edit.DeleteView):
-    model = Idea
+@login_required
+def delete_confirm_idea(request, pk):
+    idea = get_object_or_404(Idea, pk=pk)
+    return render(request, 'box/idea_delete.html', {'idea': idea, 'projects': Project.objects.all()})
+
+@login_required
+def delete_idea(request, pk):
+    idea = get_object_or_404(Idea, pk=pk)
+    idea.delete()
+    return redirect('project_list', pk=idea.project.pk)
+
+
+
+# Conclusion
+
+@login_required
+def conclusion(request, pk):
+    project = get_object_or_404(Project, pk=pk)
+    projects = Project.objects.all()
+    if request.method == "POST":
+        form = ConclusionForm(request.POST, request.FILES)
+        if form.is_valid():
+            conc = form.save(commit=False)
+            conc.project = project
+            conc.save()
+            # project.finish()
+            return redirect('project_list', pk=project.pk)
+    else:
+        form = ConclusionForm()
+    return render(request, 'box/conc_form.html', {'form': form, 'projects': projects})
+
+class DetailConclusion(LoginRequiredMixin, generic.DetailView):
+    model = Conclusion
+    template_name = 'box/conc_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["projects"] = Project.objects.all()
+        return context
+
+class UpdateConclusion(LoginRequiredMixin, generic.edit.UpdateView):
+    model = Conclusion
+    fields = ['conclusion', 'description', 'image']
+
+    template_name = 'box/conc_form.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["projects"] = Project.objects.all()
+        return context
+
+class DeleteConclusion(LoginRequiredMixin, generic.edit.DeleteView):
+    model = Conclusion
+    template_name = 'box/conc_delete.html'
     success_url = reverse_lazy('index')
-
-    template_name = 'box/idea_delete.html'
-
-    def dispatch(self, request, *args, **kwargs):
-        # ownership validation
-        obj = self.get_object()
-        if obj.author != self.request.user:
-            raise PermissionDenied('You do not have permission to delete.')
-
-        return super(DeleteIdea, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -137,29 +190,8 @@ class DeleteIdea(LoginRequiredMixin, generic.edit.DeleteView):
 
 
 
-# Conclusion
-
-def conclusion(request, pk):
-    project = get_object_or_404(Project, pk=pk)
-    projects = Project.objects.all()
-    if request.method == "POST":
-        form = ConclusionForm(request.POST)
-        if form.is_valid():
-            conc = form.save(commit=False)
-            if conc.image:
-                conc.image = request.FILES['image']
-            conc.project = project
-            conc.save()
-            project.finish()
-            return redirect('project_list', pk=project.pk)
-    else:
-        form = ConclusionForm()
-    return render(request, 'box/conc_form.html', {'form': form, 'projects': projects})
-
-
-
 # Board
 
-class CreateBoard(generic.DetailView):
+class CreateBoard(LoginRequiredMixin, generic.DetailView):
     model = Project
     template_name = 'box/board.html'
