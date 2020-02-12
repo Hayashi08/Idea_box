@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+{#    <meta http-equiv="refresh" content="2; URL=">#}
 
     <title>{% if request.path != '/' %}{% block title %}{% endblock %} | {% endif %}Idea box</title>
 
@@ -59,18 +60,20 @@
         <!-- Nav Item - Pages Collapse Menu -->
         {#      {% block project %}{% endblock %}#}
 
-        <li>
+        <li class="nav-item">
             {% for project in projects %}
                 <a class="nav-link" href="{% url 'project_list' pk=project.pk %}">
-                    <span class="text-gray-100 mx-3">{{ project.name }}</span>
+                    <span class="text-gray-100">{{ project.name }}</span>
                 </a>
             {% endfor %}
         </li>
 
-        <a class="nav-link text-gray-100" href="{% url 'project_create' %}">
+        <li class="nav-item">
+            <a class="nav-link text-gray-100" href="{% url 'project_create' %}">
             <i class="fas fa-plus-circle ml-2"></i>
             <span>プロジェクト作成</span>
-        </a>
+            </a>
+        </li>
 
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">

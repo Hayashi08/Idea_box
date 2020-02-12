@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load widget_tweaks %}
+
 {% block title %}create project{% endblock %}
 
 {% block top %}
@@ -8,11 +10,47 @@
 
 {% block content %}
 
-<form method="post" class="post-form">{% csrf_token %}
-    {{ form.as_p }}
-    <p><input type="submit" value="Create"></input></p>
-</form>
+    <div class="container">
 
-<p><a href="javascript:history.back()">&lt; Back</a></p>
+        <div class="row justify-content-center">
+
+            <div class="col-lg-8">
+
+                <form method="post">{% csrf_token %}
+                    <div class="form-group">
+                        <label class="pt-2">
+                            プロジェクト名：
+                        </label>
+                        <div>
+                            {{ form.name|add_class:"form-control" }}
+                        </div>
+                        <label class="pt-2">
+                            目的：
+                        </label>
+                        <div>
+                            {{ form.goal|add_class:"form-control" }}
+                        </div>
+                        <label class="pt-2">
+                            期限：
+                        </label>
+                        <div>
+                            {{ form.limit|add_class:"form-control" }}
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit"
+                                class="btn btn-primary btn-lg">{{ object|yesno:'Update,Create Project' }}</button>
+                    </div>
+
+                </form>
+
+                <p class="pt-2"><a class="text-decoration-none" href="javascript:history.back()">&lt; Back</a></p>
+
+            </div>
+
+        </div>
+
+    </div>
 
 {% endblock %}

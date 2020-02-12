@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load widget_tweaks %}
+
 {% block title %}Add idea{% endblock %}
 
 {% block top %}
@@ -8,11 +10,46 @@
 
 {% block content %}
 
-<form method="post" class="post-form" enctype="multipart/form-data">{% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Add</button>
-</form>
+    <div class="container">
 
-<p><a href="javascript:history.back()">&lt; Back</a></p>
+        <div class="row justify-content-center">
+
+            <div class="col-lg-8">
+
+                <form method="post" enctype="multipart/form-data">{% csrf_token %}
+                    <div class="form-group">
+                        <label class="pt-2">
+                            アイディア名：
+                        </label>
+                        <div>
+                            {{ form.idea|add_class:"form-control" }}
+                        </div>
+                        <label class="pt-2">
+                            説明：
+                        </label>
+                        <div>
+                            {{ form.description|add_class:"form-control" }}
+                        </div>
+                        <label class="pt-2">
+                            画像：
+                        </label>
+                        <div>
+                            {{ form.image }}
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-lg">{{ object|yesno:'Update,Add' }}</button>
+                    </div>
+
+                </form>
+
+                <p class="pt-2"><a class="text-decoration-none" href="javascript:history.back()">&lt; Back</a></p>
+
+            </div>
+
+        </div>
+
+    </div>
 
 {% endblock %}

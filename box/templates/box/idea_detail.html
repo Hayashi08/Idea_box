@@ -3,34 +3,46 @@
 {% block title %}detail{% endblock %}
 
 {% block top %}
-アイディアの詳細
+    アイディアの詳細
 {% endblock %}
 
 {% block content %}
 
-<div class="">
+    <div class="container">
 
-<h1>
-    <span class="mr-5">{{ object.idea }}</span>
-    {# ownership #}
-    {% if request.user.id == object.author_id %}
-        <a class="btn btn-primary btn-circle" href="{% url 'idea_update' object.pk %}"><i class="fas fa-edit"></i></a>
-        <a class="btn btn-danger btn-circle" href="{% url 'idea_delete_confirm' object.pk %}"><i class="fas fa-trash"></i></a>
-    {% endif %}
-</h1>
-<p>{{ object.description|linebreaksbr }}</p>
+        <div class="row justify-content-center">
 
-{% if object.image %}
-    <p><img src="{{ object.image.url }}"></p>
-{% endif %}
+            <div class="col-lg-8">
 
-<p>投稿者: {{ object.author }}</p>
-<p>投稿日:&nbsp;{{ object.created_at }}<span>/</span>更新日:&nbsp;{{ object.updated_at }}</p>
+                {# ownership #}
+                {% if request.user.id == object.author_id %}
+                    <div class="float-right">
+                        <a class="btn btn-primary btn-circle" href="{% url 'idea_update' object.pk %}"><i class="fas fa-edit"></i></a>
+                        <a class="btn btn-danger btn-circle" href="{% url 'idea_delete_confirm' object.pk %}"><i class="fas fa-trash"></i></a>
+                    </div>
+                {% endif %}
+                <div class="">
+                    <span class="h3">{{ object.idea }}</span>
+                </div>
 
-<section>
-    <p><a href="javascript:history.back()">&lt; Back</a></p>
-</section>
+                <div class="my-5 h5">
+                    {{ object.description|linebreaksbr }}
+                </div>
 
-</div>
+                {% if object.image %}
+                    <p><img class="image-limit" src="{{ object.image.url }}"></p>
+                {% endif %}
+
+                <p class="">投稿者: {{ object.author }}</p>
+                <p class="small">投稿日:&nbsp;{{ object.created_at }}<span>/</span>更新日:&nbsp;{{ object.updated_at }}</p>
+
+                <p class="pt-2"><a class="text-decoration-none" href="{% url 'project_list' pk=object.project.pk %}">&lt; Back</a></p>
+
+            </div>
+
+        </div>
+
+    </div>
+
 
 {% endblock %}
