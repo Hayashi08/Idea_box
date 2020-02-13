@@ -34,4 +34,6 @@ urlpatterns = [
 
     path('idea/delete/complete/<pk>/', views.delete_idea, name='idea_delete'),
 
+    path('archive/list/', views.ArchiveList.as_view(), name='archive'),
+
 ]

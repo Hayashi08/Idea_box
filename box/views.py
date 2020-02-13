@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Project,Idea,Conclusion
 from django.shortcuts import render, get_object_or_404
 from .forms import IdeaForm,ConclusionForm
+from django.db.models import Q
 
 
 
@@ -195,3 +196,16 @@ class DeleteConclusion(LoginRequiredMixin, generic.edit.DeleteView):
 class CreateBoard(LoginRequiredMixin, generic.DetailView):
     model = Project
     template_name = 'box/board.html'
+
+
+# Archive
+
+class ArchiveList(LoginRequiredMixin, generic.ListView):
+    model = Project
+    ordering = ['created_at']
+    template_name = 'box/archive.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)  # はじめに継承元のメソッドを呼び出す
+        context["projects"] = Project.objects.all()
+        return context
