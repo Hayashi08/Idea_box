@@ -111,7 +111,7 @@ class DetailIdea(LoginRequiredMixin, generic.DetailView):
 
 class UpdateIdea(LoginRequiredMixin, generic.edit.UpdateView):
     model = Idea
-    fields = ['idea', 'description', 'image']  # '__all__'
+    fields = ['idea', 'description', 'image', 'file']  # '__all__'
 
     template_name = 'box/idea_form.html'
 
@@ -170,7 +170,7 @@ class DetailConclusion(LoginRequiredMixin, generic.DetailView):
 
 class UpdateConclusion(LoginRequiredMixin, generic.edit.UpdateView):
     model = Conclusion
-    fields = ['conclusion', 'description', 'image']
+    fields = ['conclusion', 'description', 'image', 'file']
 
     template_name = 'box/conc_form.html'
 
@@ -202,8 +202,9 @@ class CreateBoard(LoginRequiredMixin, generic.DetailView):
 
 class ArchiveList(LoginRequiredMixin, generic.ListView):
     model = Project
-    ordering = ['created_at']
+    ordering = ['-created_at']
     template_name = 'box/archive.html'
+    paginate_by = 5
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)  # はじめに継承元のメソッドを呼び出す

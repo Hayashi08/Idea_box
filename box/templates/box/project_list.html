@@ -54,13 +54,13 @@
                         {% if conc.description or conc.image %}
                             <div class="card-body">
                                 {% if conc.image and conc.description %}
-                                    <img src="{{ conc.image.url }}" width="100" height="100" class="float-right">
-                                    {{ conc.description|truncatechars:90 }}
+                                    <img src="{{ conc.image.url }}" width="150" height="100" class="float-right">
+                                    {{ conc.description|truncatechars:90|linebreaks }}
                                 {% elif conc.image %}
                                     <div class="text-center"><img src="{{ conc.image.url }}" width="auto" height="120">
                                     </div>
                                 {% else %}
-                                    {{ conc.description|truncatechars:90 }}
+                                    {{ conc.description|truncatechars:90|linebreaks }}
                                 {% endif %}
                             </div>
                         {% endif %}
@@ -100,12 +100,12 @@
                             <div class="card-body">
                                 {% if post.image and post.description %}
                                     <img src="{{ post.image.url }}" width="auto" height="120" class="float-right">
-                                    {{ post.description|truncatechars:90 }}
+                                    {{ post.description|truncatechars:90|linebreaks }}
                                 {% elif post.image %}
                                     <div class="text-center"><img src="{{ post.image.url }}" width="100" height="100">
                                     </div>
                                 {% else %}
-                                    {{ post.description|truncatechars:90 }}
+                                    {{ post.description|truncatechars:90|linebreaks }}
                                 {% endif %}
                             </div>
                         {% endif %}

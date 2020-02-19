@@ -33,6 +33,10 @@
                     <p><img class="image-limit" src="{{ object.image.url }}"></p>
                 {% endif %}
 
+                {% if object.file %}
+                    <p><i class="fas fa-clipboard"></i>&nbsp;添付ファイル：<a class="" href="{{ object.file.url }}">{{ object.file|cut:"files/" }}</a></p>
+                {% endif %}
+
                 <p class="">投稿者: {{ object.author }}</p>
                 <p class="small">投稿日:&nbsp;{{ object.created_at }}<span>/</span>更新日:&nbsp;{{ object.updated_at }}</p>
 

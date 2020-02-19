@@ -31,10 +31,16 @@
                             {{ form.description|add_class:"form-control" }}
                         </div>
                         <label class="pt-2">
-                            画像：
+                            <i class="fas fa-image"></i>&nbsp;画像：
                         </label>
                         <div>
                             {{ form.image }}
+                        </div>
+                        <label class="pt-2">
+                            <i class="fas fa-clipboard"></i>&nbsp;添付ファイル：
+                        </label>
+                        <div>
+                            {{ form.file }}
                         </div>
                     </div>
 

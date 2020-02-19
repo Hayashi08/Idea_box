@@ -27,6 +27,7 @@ class Idea(models.Model):
     idea = models.CharField(max_length=255)
     description = models.TextField(blank=True,null=True)
     image = models.ImageField(upload_to='images/', blank=True, null=True)
+    file = models.FileField(upload_to='files/', blank=True, null=True)
     author = models.ForeignKey(
         'auth.User',
         on_delete=models.CASCADE,
@@ -47,6 +48,7 @@ class Conclusion(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     project = models.ForeignKey('box.Project', on_delete=models.CASCADE, related_name='conc')
     image = models.ImageField(upload_to='images/', blank=True, null=True)
+    file = models.FileField(upload_to='files/', blank=True, null=True)
 
     def __str__(self):
         return self.conclusion

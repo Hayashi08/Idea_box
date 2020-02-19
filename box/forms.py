@@ -6,10 +6,10 @@ class IdeaForm(forms.ModelForm):
 
     class Meta:
         model = Idea
-        fields = ('idea','description', 'image')
+        fields = ('idea','description', 'image', 'file')
 
 class ConclusionForm(forms.ModelForm):
 
     class Meta:
         model = Conclusion
-        fields = ('conclusion', 'description', 'image')
+        fields = ('conclusion', 'description', 'image', 'file')
